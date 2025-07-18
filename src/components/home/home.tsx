@@ -6,6 +6,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import styles from "./styles.module.css";
 import { useTheme } from "../../store/hooks";
+import API_URL from "../../config"
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -20,7 +21,7 @@ export default function Home() {
     data: { username: string; password: string }
   ) => {
     try {
-      const res = await fetch(`http://localhost:5001/${endpoint}`, {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
