@@ -11,6 +11,7 @@ import {
 import { useTheme, useAppSelector } from "../../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import API_URL from "../../../../config"
 
 interface User {
   _id: string;
@@ -40,7 +41,7 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5001/users?page=${currentPage}&limit=10&search=${debouncedInputValue}`,
+          `${API_URL}/users?page=${currentPage}&limit=10&search=${debouncedInputValue}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

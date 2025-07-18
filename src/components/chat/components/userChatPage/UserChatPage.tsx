@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Socket } from "socket.io-client";
 import { useTheme } from "../../../../store/hooks";
+import API_URL from "../../../../config"
 
 interface IMessage {
   _id: string;
@@ -44,7 +45,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
       if (!userID || !token) return;
       try {
         const response = await fetch(
-          `http://localhost:5001/messages/${userID}`,
+          `${API_URL}/messages/${userID}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
