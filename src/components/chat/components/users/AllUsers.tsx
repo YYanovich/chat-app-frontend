@@ -41,7 +41,7 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          `${API_URL}/users?page=${currentPage}&limit=10&search=${debouncedInputValue}`,
+          `${API_URL}/api/users?page=${currentPage}&limit=10&search=${debouncedInputValue}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
