@@ -24,7 +24,7 @@ export default function App() {
     }
 
     console.log("Створюємо новий сокет з токеном...");
-    const newSocket = io("http://localhost:5001", {
+    const newSocket = io("chat-app-backend-production-9b0d.up.railway.app", {
       auth: { token },
     });
 
