@@ -45,7 +45,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
       if (!userID || !token) return;
       try {
         const response = await fetch(
-          `${API_URL}/messages/${userID}`,
+          `${API_URL}/api/auth/messages/${userID}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
