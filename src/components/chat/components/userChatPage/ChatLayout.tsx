@@ -1,39 +1,26 @@
-import React from "react";
-import { Box } from "@mui/material";
-import { Socket } from "socket.io-client";
-import AllUsers from "../../components/users/AllUsers";
-import { useTheme } from "../../../../store/hooks";
-import { Outlet } from "react-router-dom"; // <-- Важливий імпорт
+import React from 'react';
+import { Box } from '@mui/material';
+import { Socket } from 'socket.io-client';
+import AllUsers from '../../components/users/AllUsers';
+import UserChatPage from '../userChatPage/UserChatPage';
 
-//компонент для чату з лейаутом
-export default function ChatLayout({ socket }: { socket: Socket }) {
-  const { themeStyles } = useTheme();
-
+//приватний чат з сайдбаром з можливістю вибрати користувачів та приватних повідомлень
+export default function PrivateChatView({ socket }: { socket: Socket }) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        height: "100vh",
-      }}
-    >
+    <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
       <Box
         sx={{
-          width: "320px",
+          width: '350px',
           flexShrink: 0,
-          borderRight: "1px solid",
-          borderColor: "divider",
+          borderRight: '1px solid',
+          borderColor: 'divider',
         }}
       >
         <AllUsers isSidebar={true} />
       </Box>
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Outlet />
+
+      <Box sx={{ flexGrow: 1 }}>
+        <UserChatPage socket={socket} />
       </Box>
     </Box>
   );
