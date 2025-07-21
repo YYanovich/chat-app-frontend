@@ -7,70 +7,50 @@ import AllUsers from "./components/chat/components/users/AllUsers";
 import UserChatPage from "./components/chat/components/userChatPage/UserChatPage";
 import ChatLayout from "./components/chat/components/userChatPage/ChatLayout";
 import ProtectedRoute from "./ProtectedRoute";
-import { useAppSelector, useTheme } from "./store/hooks";
+import { useAppSelector } from "./store/hooks";
 import { useEffect, useState } from "react";
 import API_URL from "./config";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 export default function App() {
   const token = useAppSelector((state) => state.auth.accessToken);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const { themeStyles } = useTheme();
 
   useEffect(() => {
-    if (token) {
-      const newSocket = io(API_URL, { auth: { token } });
-      setSocket(newSocket);
-
-      return () => {
-        newSocket.disconnect();
-      };
-    } else {
-      if (socket) socket.disconnect();
+    if (!token) {
+      if (socket) {
+        socket.disconnect();
+      }
       setSocket(null);
+      return;
     }
+
+    console.log("Створюємо новий сокет з токеном...");
+    const newSocket = io(API_URL, {
+      auth: { token },
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      console.log("Відключаємо старий сокет...");
+      newSocket.disconnect();
+    };
   }, [token]);
 
   return (
-    <Box sx={{ background: themeStyles.background, minHeight: "100vh" }}>
+    <Box sx={{ height: "100vh" }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
           path="/chat"
           element={
             <ProtectedRoute>
-              {socket ? (
-                <ChatLayout socket={socket} />
-              ) : (
-                <div>Завантаження...</div>
-              )}
+              <ChatPage socket={socket!} />
             </ProtectedRoute>
-          }
-        >
-          <Route
-            path=":userID"
-            element={socket ? <UserChatPage socket={socket} /> : null}
-          />
-          <Route
-            index
-            element={
-              <Box
-                sx={{
-                  p: 3,
-                  color: themeStyles.textColor,
-                  textAlign: "center",
-                  mt: 5,
-                }}
-              >
-                <Typography variant="h6">
-                  Оберіть чат, щоб почати спілкування
-                </Typography>
-              </Box>
-            }
-          />
-        </Route>
-
-        {/* 👇 ОСЬ ТУТ ВИПРАВЛЕННЯ ДЛЯ СТОРІНКИ КОРИСТУВАЧІВ */}
+          } //Сокети потрібен і тут і у кожному компоненті, де він буде використовуватись, тут він
+          //передається тут у дочірні компоненти для подальшої роботи з ним
+        />
         <Route
           path="/users"
           element={
@@ -80,14 +60,21 @@ export default function App() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "flex-start", // Вирівнюємо по верху
-                  p: 4, // Відступи зверху та по боках
-                  height: "calc(100vh - 64px)", // Займає всю висоту мінус хедер
-                  overflowY: "auto", // Додаємо прокрутку, якщо потрібно
+                  alignItems: "flex-start",
+                  p: 4,
+                  height: "100vh",
                 }}
               >
                 <AllUsers />
               </Box>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat/:userID"
+          element={
+            <ProtectedRoute>
+              <UserChatPage socket={socket!} />
             </ProtectedRoute>
           }
         />
