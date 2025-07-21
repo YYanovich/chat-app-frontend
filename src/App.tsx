@@ -1,15 +1,15 @@
 import "./App.css";
 import { io, Socket } from "socket.io-client";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./components/home/home";
-import ChatPage from "./components/chat/mainChatPage";
 import AllUsers from "./components/chat/components/users/AllUsers";
-import UserChatPage from "./components/chat/components/userChatPage/UserChatPage"
-import ChatLayout from "./components/chat/components/userChatPage/ChatLayout"
+import ChatPage from "./components/chat/mainChatPage";
+import ChatLayout from "./components/chat/components/userChatPage/ChatLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAppSelector } from "./store/hooks";
 import { useEffect, useState } from "react";
-import API_URL from "./config"
+import API_URL from "./config";
+import { Box, Typography } from "@mui/material";
 
 export default function App() {
   const token = useAppSelector((state) => state.auth.accessToken);
@@ -61,7 +61,7 @@ export default function App() {
       path="/chat/:userID"
       element={
         <ProtectedRoute>
-          <UserChatPage socket={socket!}/>
+          <ChatLayout socket={socket!}/>
         </ProtectedRoute>
       }
       />
