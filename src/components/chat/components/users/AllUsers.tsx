@@ -99,16 +99,29 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
   return (
     <Box
       sx={{
-        p: 2, // Простий відступ
-        height: "100%",
+        // Якщо це сайдбар, він займає 100% ширини батька (колонки).
+        // Якщо це окрема сторінка, він має максимальну ширину, щоб гарно виглядати по центру.
+        width: "100%",
+        maxWidth: isSidebar ? "100%" : "700px",
+        p: 2,
+        // В сайдбарі займає всю висоту, на сторінці - автоматично, але не більше висоти екрану
+        height: isSidebar ? "100%" : "auto",
+        maxHeight: "calc(100vh - 80px)",
         background: themeStyles.background,
         color: themeStyles.textColor,
-        display: 'flex',
-        flexDirection: 'column'
+        display: "flex",
+        flexDirection: "column",
+        // Додамо тінь та скруглення для окремої сторінки для краси
+        boxShadow: isSidebar ? "none" : "0 4px 12px rgba(0,0,0,0.15)",
+        borderRadius: isSidebar ? 0 : "12px",
       }}
     >
-      <Typography variant="h4" component="h1" sx={{ mb: 2, textAlign: 'center' }}>
-        {isSidebar ? "Чати" : "Користувачі"}
+      <Typography
+        variant="h4"
+        component="h1"
+        sx={{ mb: 2, textAlign: "center" }}
+      >
+        {isSidebar ? "Чати" : "Всі користувачі"}
       </Typography>
 
       <TextField
@@ -125,12 +138,14 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
             "&.Mui-focused fieldset": { borderColor: themeStyles.primaryColor },
           },
           "& .MuiInputLabel-root": { color: themeStyles.textColor },
-          "& .MuiInputLabel-root.Mui-focused": { color: themeStyles.primaryColor },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: themeStyles.primaryColor,
+          },
           input: { color: themeStyles.textColor },
         }}
       />
 
-      <List sx={{ width: "100%", flexGrow: 1, overflowY: 'auto' }}>
+      <List sx={{ width: "100%", flexGrow: 1, overflowY: "auto" }}>
         {users.map((user) => (
           <ListItem
             onClick={() => handleUserClick(user._id, user.username)}
@@ -157,8 +172,8 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
           sx={{
             mt: "auto",
             pt: 2,
-            display: 'flex',
-            justifyContent: 'center',
+            display: "flex",
+            justifyContent: "center",
             "& .MuiPaginationItem-root": { color: themeStyles.textColor },
           }}
           count={totalPages}

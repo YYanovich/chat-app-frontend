@@ -4,12 +4,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/home/home";
 import ChatPage from "./components/chat/mainChatPage";
 import AllUsers from "./components/chat/components/users/AllUsers";
-import UserChatPage from "./components/chat/components/userChatPage/UserChatPage"
-import ChatLayout from "./components/chat/components/userChatPage/ChatLayout"
+import UserChatPage from "./components/chat/components/userChatPage/UserChatPage";
+import ChatLayout from "./components/chat/components/userChatPage/ChatLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAppSelector } from "./store/hooks";
 import { useEffect, useState } from "react";
-import API_URL from "./config"
+import API_URL from "./config";
+import { Box } from "@mui/material";
 
 export default function App() {
   const token = useAppSelector((state) => state.auth.accessToken);
@@ -38,33 +39,46 @@ export default function App() {
   }, [token]);
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <ChatPage socket={socket!}/> 
-          </ProtectedRoute>
-        }//Сокети потрібен і тут і у кожному компоненті, де він буде використовуватись, тут він
-        //передається тут у дочірні компоненти для подальшої роботи з ним
-      />
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <AllUsers />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-      path="/chat/:userID"
-      element={
-        <ProtectedRoute>
-          <UserChatPage socket={socket!}/>
-        </ProtectedRoute>
-      }
-      />
-    </Routes>
+    <Box sx={{ height: "100vh" }}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatPage socket={socket!} />
+            </ProtectedRoute>
+          } //Сокети потрібен і тут і у кожному компоненті, де він буде використовуватись, тут він
+          //передається тут у дочірні компоненти для подальшої роботи з ним
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              {/* Цей Box центрує компонент на сторінці */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  p: 4,
+                  height: "100vh",
+                }}
+              >
+                <AllUsers />
+              </Box>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat/:userID"
+          element={
+            <ProtectedRoute>
+              <UserChatPage socket={socket!} />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Box>
   );
 }
