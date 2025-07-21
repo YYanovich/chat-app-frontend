@@ -21,7 +21,7 @@ export default function Home() {
     data: { username: string; password: string }
   ) => {
     try {
-      const res = await fetch(`${API_URL}/api/auth/${endpoint}`, {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
