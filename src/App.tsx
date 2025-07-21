@@ -1,15 +1,15 @@
 import "./App.css";
 import { io, Socket } from "socket.io-client";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./components/home/home";
-import ChatPage from "./components/chat/mainChatPage";
 import AllUsers from "./components/chat/components/users/AllUsers";
-import UserChatPage from "./components/chat/components/userChatPage/UserChatPage"
-import ChatLayout from "./components/chat/components/userChatPage/ChatLayout"
+import UserChatPage from "./components/chat/components/userChatPage/UserChatPage";
+import ChatLayout from "./components/chat/components/userChatPage/ChatLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAppSelector } from "./store/hooks";
 import { useEffect, useState } from "react";
-import API_URL from "./config"
+import API_URL from "./config";
+import { Box, Typography } from "@mui/material";
 
 export default function App() {
   const token = useAppSelector((state) => state.auth.accessToken);
@@ -40,30 +40,44 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-       <Route
-          path="/chat"
+
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <ChatLayout socket={socket!} />
+          </ProtectedRoute>
+        }
+      >
+        <Route path=":userID" element={<UserChatPage socket={socket!} />} />
+
+        <Route
+          index
           element={
-            <ProtectedRoute>
-              <ChatLayout socket={socket!} />
-            </ProtectedRoute>
+            <Box
+              sx={{
+                p: 3,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Typography variant="h5">
+                Оберіть користувача, щоб розпочати чат
+              </Typography>
+            </Box>
           }
-        >
-          <Route path=":userID" element={<UserChatPage socket={socket!} />} />
-        </Route>
+        />
+      </Route>
+
+      <Route
         path="/users"
         element={
           <ProtectedRoute>
             <AllUsers />
           </ProtectedRoute>
         }
-      
-      <Route
-      path="/chat/:userID"
-      element={
-        <ProtectedRoute>
-          <UserChatPage socket={socket!}/>
-        </ProtectedRoute>
-      }
       />
     </Routes>
   );
