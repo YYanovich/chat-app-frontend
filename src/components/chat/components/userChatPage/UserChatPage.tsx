@@ -44,12 +44,9 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
     const fetchMessages = async () => {
       if (!userID || !token) return;
       try {
-        const response = await fetch(
-          `${API_URL}/api/auth/messages/${userID}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await fetch(`${API_URL}/api/auth/messages/${userID}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (!response.ok)
           throw new Error("Не вдалося завантажити повідомлення");
         const data = await response.json();
@@ -107,30 +104,28 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
   return (
     <Box
       sx={{
-        p: 3,
         display: "flex",
         flexDirection: "column",
-        height: "101.5%",
-        width: "143%",
+        height: "100%", // ВИПРАВЛЕНО: займає 100% висоти контейнера
+        // width прибрано, щоб контейнер сам розрахував ширину
         background: themeStyles.background,
         color: themeStyles.textColor,
       }}
     >
-      <Typography variant="h4">Чат з користувачем</Typography>
+      <Typography variant="h5" sx={{ p: 2, pb: 1, flexShrink: 0 }}>
+        Чат з користувачем
+      </Typography>
+
+      {/* Контейнер для повідомлень */}
       <Box
         sx={{
-          mt: 2,
-          p: 2,
           flexGrow: 1,
           overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          background: themeStyles.background,
+          p: 2,
         }}
       >
         {messages.map((msg) => {
           const isMyMessage = msg.sender === currentUserId;
-
           return (
             <Box
               key={msg._id}
@@ -143,11 +138,17 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
               <Paper
                 elevation={2}
                 sx={{
-                  p: "6px 12px",
-                  backgroundColor: isMyMessage ? "#005c4b" : "#ffffff",
-                  color: isMyMessage ? "#ffffff" : "#000000",
-                  borderRadius: "12px",
-                  maxWidth: "70%",
+                  p: "8px 14px",
+                  backgroundColor: isMyMessage
+                    ? themeStyles.primaryColor
+                    : themeStyles.paperBg,
+                  color: isMyMessage
+                    ? themeStyles.inputColor
+                    : themeStyles.textColor,
+                  borderRadius: isMyMessage
+                    ? "20px 20px 4px 20px"
+                    : "20px 20px 20px 4px",
+                  maxWidth: "75%",
                 }}
               >
                 <Typography variant="body1">{msg.content}</Typography>
@@ -170,15 +171,19 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
           );
         })}
       </Box>
+
+      {/* Форма відправки */}
       <Box
         component="form"
         onSubmit={handleSubmit(handleSendMessage)}
         sx={{
-          backgroundColor: themeStyles.paperBg, 
-          borderRadius: "15px", 
-          mt: 2,
+          p: 2,
+          backgroundColor: themeStyles.paperBg,
+          borderTop: "1px solid",
+          borderColor: "divider",
           display: "flex",
           alignItems: "center",
+          flexShrink: 0,
         }}
       >
         <TextField
@@ -186,32 +191,17 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
           variant="outlined"
           placeholder="Напишіть повідомлення..."
           {...register("message", { required: true })}
+          autoComplete="off"
           sx={{
-            p: 2,
+            mr: 1,
             "& .MuiOutlinedInput-root": {
-              backgroundColor: themeStyles.inputBg, 
-
-              "& fieldset": {
-                border: "none",
-              },
-              "&:hover fieldset": {
-                border: "none",
-              },
-              "&.Mui-focused fieldset": {
-                border: "none",
-              },
-            },
-            "& .MuiInputBase-input": {
-              color: themeStyles.inputColor,
-            },
-            "& .MuiInputBase-input::placeholder": {
-              color: themeStyles.helperColor,
-              opacity: 1,
+              backgroundColor: themeStyles.inputBg,
+              color: themeStyles.textColor,
             },
           }}
         />
-        <IconButton type="submit" color="primary" sx={{ ml: 1 }}>
-          <SendIcon sx={{pr:2}}/>
+        <IconButton type="submit" color="primary" sx={{ p: "10px" }}>
+          <SendIcon />
         </IconButton>
       </Box>
     </Box>
