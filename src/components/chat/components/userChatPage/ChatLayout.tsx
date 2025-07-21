@@ -1,47 +1,30 @@
-import React from "react";
-import { Box } from "@mui/material";
-import { Socket } from "socket.io-client";
-import AllUsers from "../../components/users/AllUsers";
-import { useTheme } from "../../../../store/hooks";
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import { Box } from '@mui/material';
+import { Socket } from 'socket.io-client';
+import AllUsers from '../../components/users/AllUsers';
+import UserChatPage from '../userChatPage/UserChatPage';
+import { useTheme } from '../../../../store/hooks';
 
-export default function ChatLayout({ socket }: { socket: Socket }) {
+//приватний чат з сайдбаром з можливістю вибрати користувачів та приватних повідомлень
+export default function PrivateChatView({ socket }: { socket: Socket }) {
   const { themeStyles } = useTheme();
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        height: "calc(100vh - 64px)", // Висота екрану мінус хедер
-        background: themeStyles.background,
-      }}
-    >
-      {/* Ліва колонка (сайдбар) */}
+    <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)', background: themeStyles.background }}>
       <Box
         sx={{
-          width: "320px",
+          width: '350px',
           flexShrink: 0,
-          borderRight: "1px solid",
-          borderColor: "divider",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
+          borderRight: '1px solid',
+          borderColor: 'divider',
+          height: '100%',
+          overflowY: 'auto'
         }}
       >
         <AllUsers isSidebar={true} />
       </Box>
 
-      {/* Права колонка (тут буде відображатись чат) */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Outlet />
+      <Box sx={{ flexGrow: 1, height: '100%', overflowY: 'auto' }}>
+        <UserChatPage socket={socket} />
       </Box>
     </Box>
-  );
-}
+)};
