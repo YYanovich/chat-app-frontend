@@ -39,7 +39,7 @@ export default function Home() {
         );
         navigate("/chat");
       } else {
-        setError(result.error || "Помилка авторизації");
+        setError(result.message || "Помилка реєстрації");
         setTimeout(() => setError(""), 3000);
       }
     } catch (err) {

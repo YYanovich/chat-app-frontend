@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Socket } from "socket.io-client";
 import { useTheme } from "../../../../store/hooks";
-import API_URL from "../../../../config"
+import API_URL from "../../../../config";
 
 interface IMessage {
   _id: string;
@@ -58,6 +58,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
         setError(err.message);
       }
     };
+
     fetchMessages();
   }, [userID, token]);
 
@@ -106,16 +107,16 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
   return (
     <Box
       sx={{
-        p: 3,
+        p: 3, // Простий відступ
         display: "flex",
         flexDirection: "column",
-        height: "101.5%",
-        width: "143%",
+        height: "100%",
         background: themeStyles.background,
         color: themeStyles.textColor,
+        boxSizing: 'border-box'
       }}
     >
-      <Typography variant="h4">Чат з користувачем</Typography>
+      <Typography variant="h5" sx={{ mb: 1 }}>Чат з користувачем</Typography>
       <Box
         sx={{
           mt: 2,
@@ -173,8 +174,8 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
         component="form"
         onSubmit={handleSubmit(handleSendMessage)}
         sx={{
-          backgroundColor: themeStyles.paperBg, 
-          borderRadius: "15px", 
+          backgroundColor: themeStyles.paperBg,
+          borderRadius: "15px",
           mt: 2,
           display: "flex",
           alignItems: "center",
@@ -188,7 +189,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
           sx={{
             p: 2,
             "& .MuiOutlinedInput-root": {
-              backgroundColor: themeStyles.inputBg, 
+              backgroundColor: themeStyles.inputBg,
 
               "& fieldset": {
                 border: "none",
@@ -210,7 +211,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
           }}
         />
         <IconButton type="submit" color="primary" sx={{ ml: 1 }}>
-          <SendIcon sx={{pr:2}}/>
+          <SendIcon sx={{ pr: 2 }} />
         </IconButton>
       </Box>
     </Box>

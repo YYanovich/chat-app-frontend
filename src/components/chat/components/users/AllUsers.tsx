@@ -11,7 +11,7 @@ import {
 import { useTheme, useAppSelector } from "../../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import API_URL from "../../../../config"
+import API_URL from "../../../../config";
 
 interface User {
   _id: string;
@@ -99,121 +99,73 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
   return (
     <Box
       sx={{
-        ...(isSidebar
-          ? {
-              p: 2,
-              minHeight: "95vh",
-              overflowY: "auto",
-              background: themeStyles.background,
-              color: themeStyles.textColor,
-              pt: 4,
-            }
-          : {
-              minWidth: "107rem",
-              minHeight: "100vh",
-              p: 3,
-              background: themeStyles.background,
-              color: themeStyles.textColor,
-              boxSizing: "border-box",
-              pl: 25,
-            }),
+        p: 2, // Простий відступ
+        height: "100%",
+        background: themeStyles.background,
+        color: themeStyles.textColor,
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
-      <Box
+      <Typography variant="h4" component="h1" sx={{ mb: 2, textAlign: 'center' }}>
+        {isSidebar ? "Чати" : "Користувачі"}
+      </Typography>
+
+      <TextField
+        label="Пошук користувачів"
+        {...register("search")}
+        fullWidth
+        variant="outlined"
         sx={{
-          ...(isSidebar
-            ? {
-                width: "100%",
-              }
-            : {
-                maxWidth: "500px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
-                pl: 55,
-              }),
+          mb: 2,
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: themeStyles.paperBg,
+            "& fieldset": { borderColor: themeStyles.inputBg },
+            "&:hover fieldset": { borderColor: themeStyles.primaryColor },
+            "&.Mui-focused fieldset": { borderColor: themeStyles.primaryColor },
+          },
+          "& .MuiInputLabel-root": { color: themeStyles.textColor },
+          "& .MuiInputLabel-root.Mui-focused": { color: themeStyles.primaryColor },
+          input: { color: themeStyles.textColor },
         }}
-      >
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          {isSidebar ? "Чати" : "Користувачі"}
-        </Typography>
+      />
 
-        <TextField
-          label="Пошук користувачів"
-          // value={inputValue}                               без react-hook-form
-          // onChange={(e) => setInputValue(e.target.value)}  без react-hook-form
-          {...register("search")} //з react-hook-form
-          fullWidth
-          variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: themeStyles.paperBg,
-              "& fieldset": {
-                borderColor: themeStyles.inputBg,
-              },
-              "&:hover fieldset": {
+      <List sx={{ width: "100%", flexGrow: 1, overflowY: 'auto' }}>
+        {users.map((user) => (
+          <ListItem
+            onClick={() => handleUserClick(user._id, user.username)}
+            key={user._id}
+            sx={{
+              bgcolor: themeStyles.paperBg,
+              border: `1px solid ${themeStyles.inputBg}`,
+              borderRadius: "8px",
+              mb: 1,
+              cursor: "pointer",
+              "&:hover": {
+                bgcolor: themeStyles.primaryColor,
+                color: themeStyles.paperBg,
                 borderColor: themeStyles.primaryColor,
               },
-              "&.Mui-focused fieldset": {
-                borderColor: themeStyles.primaryColor,
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: themeStyles.textColor,
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: themeStyles.primaryColor,
-            },
-            input: { color: themeStyles.textColor },
-          }}
-        />
-
-        <List sx={isSidebar ? { width: "100%", top: 12 } : { width: "100%" }}>
-          {users.map((user) => (
-            <ListItem
-              onClick={() => handleUserClick(user._id, user.username)}
-              key={user._id}
-              sx={{
-                bgcolor: themeStyles.paperBg,
-                border: `1px solid ${themeStyles.inputBg}`,
-                borderRadius: "8px",
-                mb: 2.5,
-                cursor: "pointer",
-                "&:hover": {
-                  bgcolor: themeStyles.primaryColor,
-                  color: themeStyles.paperBg,
-                  borderColor: themeStyles.primaryColor,
-                },
-              }}
-            >
-              <ListItemText primary={user.username} />
-            </ListItem>
-          ))}
-        </List>
+            }}
+          >
+            <ListItemText primary={user.username} />
+          </ListItem>
+        ))}
+      </List>
+      {totalPages > 1 && (
         <Pagination
-          sx={
-            isSidebar
-              ? {
-                  mt: "auto",
-                  pt: 5.5, 
-                  alignSelf: "center",
-                  ml: 7.4,
-                  "& .MuiPaginationItem-root": {
-                    color: themeStyles.textColor,
-                  }, 
-                }
-              : { 
-                  "& .MuiPaginationItem-root": {
-                    color: themeStyles.textColor,
-                  },
-                }
-          }
+          sx={{
+            mt: "auto",
+            pt: 2,
+            display: 'flex',
+            justifyContent: 'center',
+            "& .MuiPaginationItem-root": { color: themeStyles.textColor },
+          }}
           count={totalPages}
           page={currentPage}
           onChange={handlePageChange}
-        ></Pagination>
-      </Box>
+        />
+      )}
     </Box>
   );
 }
