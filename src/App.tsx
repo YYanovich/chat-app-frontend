@@ -40,23 +40,23 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <ChatPage socket={socket!}/> 
-          </ProtectedRoute>
-        }//Сокети потрібен і тут і у кожному компоненті, де він буде використовуватись, тут він
-        //передається тут у дочірні компоненти для подальшої роботи з ним
-      />
-      <Route
+       <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatLayout socket={socket!} />
+            </ProtectedRoute>
+          }
+        >
+          <Route path=":userID" element={<UserChatPage socket={socket!} />} />
+        </Route>
         path="/users"
         element={
           <ProtectedRoute>
             <AllUsers />
           </ProtectedRoute>
         }
-      />
+      
       <Route
       path="/chat/:userID"
       element={

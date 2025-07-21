@@ -143,7 +143,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
           borderColor: "divider",
         }}
       >
-        Чат з {userID}
+        Чат з користувачем
       </Typography>
 
       {/* Контейнер для повідомлень (прокручується) */}
