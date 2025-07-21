@@ -9,6 +9,7 @@ import ChatLayout from "./components/chat/components/userChatPage/ChatLayout"
 import ProtectedRoute from "./ProtectedRoute";
 import { useAppSelector } from "./store/hooks";
 import { useEffect, useState } from "react";
+import API_URL from "./config"
 
 export default function App() {
   const token = useAppSelector((state) => state.auth.accessToken);
@@ -24,7 +25,7 @@ export default function App() {
     }
 
     console.log("Створюємо новий сокет з токеном...");
-    const newSocket = io("https://chat-app-backend-production-9b0d.up.railway.app", {
+    const newSocket = io(`${API_URL}`, {
       auth: { token },
     });
 
