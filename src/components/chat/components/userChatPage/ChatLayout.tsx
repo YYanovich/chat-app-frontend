@@ -2,8 +2,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import { Socket } from "socket.io-client";
 import AllUsers from "../../components/users/AllUsers";
-import UserChatPage from "../userChatPage/UserChatPage";
 import { useTheme } from "../../../../store/hooks";
+import { Outlet } from "react-router-dom"; // <-- Важливий імпорт
 
 export default function PrivateChatView({ socket }: { socket: Socket }) {
   const { themeStyles } = useTheme();
@@ -24,13 +24,14 @@ export default function PrivateChatView({ socket }: { socket: Socket }) {
           borderRight: "1px solid",
           borderColor: "divider",
           height: "100%",
-          overflowY: "auto", // Власна прокрутка для списку користувачів
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <AllUsers isSidebar={true} />
       </Box>
 
-      {/* Права колонка (чат) */}
+      {/* Права колонка (тут буде відображатись чат) */}
       <Box
         sx={{
           flexGrow: 1,
@@ -39,7 +40,8 @@ export default function PrivateChatView({ socket }: { socket: Socket }) {
           flexDirection: "column",
         }}
       >
-        <UserChatPage socket={socket} />
+        {/* Outlet рендерить дочірній маршрут (UserChatPage) */}
+        <Outlet />
       </Box>
     </Box>
   );

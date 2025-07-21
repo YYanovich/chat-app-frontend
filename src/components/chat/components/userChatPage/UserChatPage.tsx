@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../../../store/hooks";
 import { Box, Typography, Paper, TextField, IconButton } from "@mui/material";
@@ -38,7 +38,18 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
   const { register, handleSubmit, reset } = useForm<IFormInput>();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
-  //   const [newMessage, setNewMessage] = useState(""); //без біліотеки react-hook-form
+  const messagesEndRef = useRef<null | HTMLDivElement>(null); // Ref для автопрокрутки
+
+  // Функція для прокрутки до останнього повідомлення
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Викликаємо прокрутку щоразу, коли оновлюються повідомлення
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   // АВТОРИЗАЦІЯ
   useEffect(() => {
     const fetchMessages = async () => {
@@ -97,6 +108,16 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
     reset();
   };
 
+  if (!userID) {
+    return (
+      <Box sx={{ p: 3, color: themeStyles.textColor }}>
+        <Typography variant="h6">
+          Оберіть чат, щоб почати спілкування
+        </Typography>
+      </Box>
+    );
+  }
+
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
@@ -106,21 +127,30 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100%", // ВИПРАВЛЕНО: займає 100% висоти контейнера
-        // width прибрано, щоб контейнер сам розрахував ширину
+        height: "100%", // Займає всю висоту правої колонки
         background: themeStyles.background,
         color: themeStyles.textColor,
       }}
     >
-      <Typography variant="h5" sx={{ p: 2, pb: 1, flexShrink: 0 }}>
-        Чат з користувачем
+      {/* Заголовок чату (не прокручується) */}
+      <Typography
+        variant="h5"
+        sx={{
+          p: 2,
+          pb: 1,
+          flexShrink: 0,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        Чат з {userID}
       </Typography>
 
-      {/* Контейнер для повідомлень */}
+      {/* Контейнер для повідомлень (прокручується) */}
       <Box
         sx={{
-          flexGrow: 1,
-          overflowY: "auto",
+          flexGrow: 1, // Займає весь доступний простір
+          overflowY: "auto", // ДОДАЄ ВЛАСНУ ПРОКРУТКУ
           p: 2,
         }}
       >
@@ -143,7 +173,7 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
                     ? themeStyles.primaryColor
                     : themeStyles.paperBg,
                   color: isMyMessage
-                    ? themeStyles.inputColor
+                    ? themeStyles.textColor
                     : themeStyles.textColor,
                   borderRadius: isMyMessage
                     ? "20px 20px 4px 20px"
@@ -170,9 +200,10 @@ export default function UserChatPage({ socket }: { socket: Socket }) {
             </Box>
           );
         })}
+        <div ref={messagesEndRef} /> {/* Невидимий елемент для прокрутки */}
       </Box>
 
-      {/* Форма відправки */}
+      {/* Форма відправки (не прокручується) */}
       <Box
         component="form"
         onSubmit={handleSubmit(handleSendMessage)}

@@ -98,122 +98,86 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
   return (
     <Box
       sx={{
-        ...(isSidebar
-          ? {
-              p: 2,
-              minHeight: "94vh",
-              overflowY: "auto",
-              background: themeStyles.background,
-              color: themeStyles.textColor,
-              pt: 4,
-            }
-          : {
-              minWidth: "107rem",
-              minHeight: "100vh",
-              p: 3,
-              background: themeStyles.background,
-              color: themeStyles.textColor,
-              boxSizing: "border-box",
-              pl: 25,
-            }),
+        // Прибираємо всі умовні стилі, бо компонент тепер завжди в сайдбарі
+        p: 2,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        background: themeStyles.background,
+        color: themeStyles.textColor,
       }}
     >
-      <Box
+      <Typography variant="h5" component="h1" sx={{ mb: 2, flexShrink: 0 }}>
+        Чати
+      </Typography>
+
+      <TextField
+        label="Пошук користувачів"
+        {...register("search")}
+        fullWidth
+        variant="outlined"
         sx={{
-          ...(isSidebar
-            ? {
-                width: "100%",
-              }
-            : {
-                maxWidth: "500px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
-                pl: 55,
-              }),
+          mb: 2,
+          flexShrink: 0,
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: themeStyles.paperBg,
+            "& fieldset": {
+              borderColor: themeStyles.inputBg,
+            },
+            "&:hover fieldset": {
+              borderColor: themeStyles.primaryColor,
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: themeStyles.primaryColor,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: themeStyles.textColor,
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: themeStyles.primaryColor,
+          },
+          input: { color: themeStyles.textColor },
         }}
-      >
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          {isSidebar ? "Чати" : "Користувачі"}
-        </Typography>
+      />
 
-        <TextField
-          label="Пошук користувачів"
-          // value={inputValue}                               без react-hook-form
-          // onChange={(e) => setInputValue(e.target.value)}  без react-hook-form
-          {...register("search")} //з react-hook-form
-          fullWidth
-          variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: themeStyles.paperBg,
-              "& fieldset": {
-                borderColor: themeStyles.inputBg,
-              },
-              "&:hover fieldset": {
+      <List sx={{ width: "100%", overflowY: "auto", flexGrow: 1 }}>
+        {users.map((user) => (
+          <ListItem
+            onClick={() => handleUserClick(user._id, user.username)}
+            key={user._id}
+            sx={{
+              bgcolor: themeStyles.paperBg,
+              border: `1px solid ${themeStyles.inputBg}`,
+              borderRadius: "8px",
+              mb: 2.5,
+              cursor: "pointer",
+              "&:hover": {
+                bgcolor: themeStyles.primaryColor,
+                color: themeStyles.paperBg,
                 borderColor: themeStyles.primaryColor,
               },
-              "&.Mui-focused fieldset": {
-                borderColor: themeStyles.primaryColor,
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: themeStyles.textColor,
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: themeStyles.primaryColor,
-            },
-            input: { color: themeStyles.textColor },
-          }}
-        />
+            }}
+          >
+            <ListItemText primary={user.username} />
+          </ListItem>
+        ))}
+      </List>
 
-        <List sx={isSidebar ? { width: "100%", top: 12 } : { width: "100%" }}>
-          {users.map((user) => (
-            <ListItem
-              onClick={() => handleUserClick(user._id, user.username)}
-              key={user._id}
-              sx={{
-                bgcolor: themeStyles.paperBg,
-                border: `1px solid ${themeStyles.inputBg}`,
-                borderRadius: "8px",
-                mb: 2.5,
-                cursor: "pointer",
-                "&:hover": {
-                  bgcolor: themeStyles.primaryColor,
-                  color: themeStyles.paperBg,
-                  borderColor: themeStyles.primaryColor,
-                },
-              }}
-            >
-              <ListItemText primary={user.username} />
-            </ListItem>
-          ))}
-        </List>
-        <Pagination
-          sx={
-            isSidebar
-              ? {
-                  mt: "auto",
-                  pt: 5.5, 
-                  alignSelf: "center",
-                  ml: 7.4,
-                  // Ми звертаємось до всіх дочірніх елементів з класом MuiPaginationItem-root
-                  "& .MuiPaginationItem-root": {
-                    color: themeStyles.textColor,
-                  }, 
-                }
-              : { 
-                  "& .MuiPaginationItem-root": {
-                    color: themeStyles.textColor,
-                  },
-                }
-          }
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-        ></Pagination>
-      </Box>
+      <Pagination
+        sx={{
+          mt: "auto",
+          pt: 2,
+          alignSelf: "center",
+          flexShrink: 0,
+          "& .MuiPaginationItem-root": {
+            color: themeStyles.textColor,
+          },
+        }}
+        count={totalPages}
+        page={currentPage}
+        onChange={handlePageChange}
+      />
     </Box>
   );
 }
