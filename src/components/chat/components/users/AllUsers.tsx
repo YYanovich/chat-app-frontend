@@ -95,14 +95,13 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
   ) => {
     setCurrentPage(value);
   };
-
   return (
     <Box
       sx={{
         ...(isSidebar
           ? {
               p: 2,
-              minHeight: "95vh",
+              minHeight: "94vh",
               overflowY: "auto",
               background: themeStyles.background,
               color: themeStyles.textColor,
@@ -199,6 +198,7 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
                   pt: 5.5, 
                   alignSelf: "center",
                   ml: 7.4,
+                  // Ми звертаємось до всіх дочірніх елементів з класом MuiPaginationItem-root
                   "& .MuiPaginationItem-root": {
                     color: themeStyles.textColor,
                   }, 
