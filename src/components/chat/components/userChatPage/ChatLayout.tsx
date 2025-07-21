@@ -9,21 +9,19 @@ import { useTheme } from '../../../../store/hooks';
 export default function PrivateChatView({ socket }: { socket: Socket }) {
   const { themeStyles } = useTheme();
   return (
-    <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)', background: themeStyles.background }}>
+    <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
       <Box
         sx={{
           width: '350px',
           flexShrink: 0,
           borderRight: '1px solid',
           borderColor: 'divider',
-          height: '100%',
-          overflowY: 'auto'
         }}
       >
         <AllUsers isSidebar={true} />
       </Box>
 
-      <Box sx={{ flexGrow: 1, height: '100%', overflowY: 'auto' }}>
+      <Box sx={{ flexGrow: 1 }}>
         <UserChatPage socket={socket} />
       </Box>
     </Box>
