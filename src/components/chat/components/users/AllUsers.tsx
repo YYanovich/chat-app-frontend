@@ -101,7 +101,7 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
         ...(isSidebar
           ? {
               p: 2,
-              minHeight: "94vh",
+              minHeight: "97vh",
               overflowY: "auto",
               background: themeStyles.background,
               color: themeStyles.textColor,
@@ -197,7 +197,7 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
                   mt: "auto",
                   pt: 5.5, 
                   alignSelf: "center",
-                  ml: 7.4,
+                  ml: 7.3,
                   // Ми звертаємось до всіх дочірніх елементів з класом MuiPaginationItem-root
                   "& .MuiPaginationItem-root": {
                     color: themeStyles.textColor,
