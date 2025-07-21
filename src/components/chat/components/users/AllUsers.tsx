@@ -100,20 +100,20 @@ export default function AllUsers({ isSidebar }: { isSidebar?: boolean }) {
     <Box
       sx={{
         // Якщо це сайдбар, він займає 100% ширини батька (колонки).
-        // Якщо це окрема сторінка, він має максимальну ширину, щоб гарно виглядати по центру.
+        // Якщо це окрема сторінка, він також займає 100% ширини.
         width: "100%",
-        maxWidth: isSidebar ? "100%" : "700px",
-        p: 2,
-        // В сайдбарі займає всю висоту, на сторінці - автоматично, але не більше висоти екрану
+        // Прибираємо обмеження по ширині для окремої сторінки
+        maxWidth: "100%",
+        p: isSidebar ? 1.5 : 3, // Різні відступи для різних контекстів
         height: isSidebar ? "100%" : "auto",
         maxHeight: "calc(100vh - 80px)",
         background: themeStyles.background,
         color: themeStyles.textColor,
         display: "flex",
         flexDirection: "column",
-        // Додамо тінь та скруглення для окремої сторінки для краси
-        boxShadow: isSidebar ? "none" : "0 4px 12px rgba(0,0,0,0.15)",
-        borderRadius: isSidebar ? 0 : "12px",
+        // Тінь та скруглення тепер не потрібні, бо компонент на всю ширину
+        boxShadow: "none",
+        borderRadius: 0,
       }}
     >
       <Typography
