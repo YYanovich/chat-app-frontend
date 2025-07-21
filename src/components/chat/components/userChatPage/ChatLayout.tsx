@@ -3,9 +3,9 @@ import { Box } from "@mui/material";
 import { Socket } from "socket.io-client";
 import AllUsers from "../../components/users/AllUsers";
 import { useTheme } from "../../../../store/hooks";
-import { Outlet } from "react-router-dom"; // <-- Важливий імпорт
+import { Outlet } from "react-router-dom";
 
-export default function PrivateChatView({ socket }: { socket: Socket }) {
+export default function ChatLayout({ socket }: { socket: Socket }) {
   const { themeStyles } = useTheme();
 
   return (
@@ -19,7 +19,7 @@ export default function PrivateChatView({ socket }: { socket: Socket }) {
       {/* Ліва колонка (сайдбар) */}
       <Box
         sx={{
-          width: "350px",
+          width: "320px",
           flexShrink: 0,
           borderRight: "1px solid",
           borderColor: "divider",
@@ -40,7 +40,6 @@ export default function PrivateChatView({ socket }: { socket: Socket }) {
           flexDirection: "column",
         }}
       >
-        {/* Outlet рендерить дочірній маршрут (UserChatPage) */}
         <Outlet />
       </Box>
     </Box>
